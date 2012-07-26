@@ -351,9 +351,13 @@ class StrictRedis(object):
             elif isinstance(keys, list):
                 num_keys = len(keys)
                 keys = reduce(lambda x,y: x + ' %s' % str(y), keys, '') 
-
-        return self.execute_command("EVAL", script, num_keys, keys, args)
-
+            return self.execute_command("EVAL", script, num_keys, keys, *args)
+        else:
+            if args is not None:
+                return self.execute_command("EVAL", script, 0, *args)
+            else:
+                return self.execute_command("EVAL", script, 0)
+            
 
     #### SERVER INFORMATION ####
     def bgrewriteaof(self):
